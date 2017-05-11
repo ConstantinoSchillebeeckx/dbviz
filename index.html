@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<div id='chart'></div>
+
+
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="js/main.js"></script>
+
+<script> 
+    $(function() {
+
+        var data = {
+             "name": "flare",
+             "children": [
+              {
+               "name": "analytics",
+               "children": [
+                {
+                 "name": "cluster",
+                 "children": [
+                  {"name": "AgglomerativeCluster", "size": 3938},
+                  {"name": "CommunityStructure", "size": 3812},
+                  {"name": "HierarchicalCluster", "size": 6714},
+                  {"name": "MergeEdge", "size": 743}
+                 ]
+                },
+                {
+                 "name": "graph",
+                 "children": [
+                  {"name": "BetweennessCentrality", "size": 3534},
+                  {"name": "LinkDistance", "size": 5731},
+                  {"name": "MaxFlowMinCut", "size": 7840},
+                  {"name": "ShortestPaths", "size": 5914},
+                  {"name": "SpanningTree", "size": 3416}
+                 ]
+                },
+                {
+                 "name": "optimization",
+                 "children": [
+                  {"name": "AspectRatioBanker", "size": 7074}
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+
+
+        var chart = generateDBviz({
+            data:data,
+            selector: '#chart'
+        }); 
+
+        console.log(chart);
+
+        chart.update();
+
+    });
+</script> 
