@@ -10,7 +10,7 @@
   text-anchor: middle;
 }
 
-line.link {
+path.link {
   fill: none;
   stroke: #9ecae1;
   stroke-width: 1.5px;

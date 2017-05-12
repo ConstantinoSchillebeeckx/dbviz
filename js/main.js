@@ -56,7 +56,7 @@ function generateDBviz(options) {
         .attr("width", chart.width)
         .attr("height", chart.height);
 
-    var link = svg.selectAll(".link"),
+    var link = svg.selectAll("path"),
         node = svg.selectAll(".node");
 
     var drag = force.drag()
@@ -76,6 +76,8 @@ function generateDBviz(options) {
       var nodes = flatten(chart.options.data),
           links = d3.layout.tree().links(nodes);
 
+      console.log(nodes)
+
       // Restart the force layout.
       force
           .nodes(nodes)
@@ -87,7 +89,7 @@ function generateDBviz(options) {
 
       link.exit().remove();
 
-      link.enter().insert("line", ".node")
+      link.enter().insert("svg:path")
           .attr("class", "link");
 
       // Update nodes.
@@ -112,13 +114,17 @@ function generateDBviz(options) {
     }
 
     function tick() {
-      link.attr("x1", function(d) { return d.source.x; })
-          .attr("y1", function(d) { return d.source.y; })
-          .attr("x2", function(d) { return d.target.x; })
-          .attr("y2", function(d) { return d.target.y; });
+      // http://stackoverflow.com/a/16371890/1153897
+      link.attr("d", function(d) {
+          var dx = d.target.x - d.source.x,
+              dy = d.target.y - d.source.y,
+              dr = Math.sqrt(dx * dx + dy * dy); // controls the radius of the curve
+          return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+      });
 
       node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
     }
+
 
     function color(d) {
       return d._children ? "#3182bd" // collapsed package
@@ -142,6 +148,7 @@ function generateDBviz(options) {
     // Returns a list of all nodes under the root.
     function flatten(root) {
       var nodes = [], i = 0;
+
 
       function recurse(node) {
         if (node.children) node.children.forEach(recurse);
