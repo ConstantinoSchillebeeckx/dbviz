@@ -76,8 +76,6 @@ function generateDBviz(options) {
       var nodes = flatten(chart.options.data),
           links = d3.layout.tree().links(nodes);
 
-      console.log(nodes)
-
       // Restart the force layout.
       force
           .nodes(nodes)
@@ -146,12 +144,15 @@ function generateDBviz(options) {
     }
 
     // Returns a list of all nodes under the root.
+    // it assumes a structure like {struct: {struct: {}}
+    // and keep recursing until it gets to a struct that
+    // has a 'fields' key - that is, until it reaches the
+    // tables
     function flatten(root) {
       var nodes = [], i = 0;
 
-
       function recurse(node) {
-        if (node.children) node.children.forEach(recurse);
+        if (node.struct && !node.fields) Object.keys(node.struct).forEach(function(d) { recurse(node.struct[d]); });
         if (!node.id) node.id = ++i;
         nodes.push(node);
       }

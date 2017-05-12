@@ -18,17 +18,12 @@
 <script> 
     $(function() {
 
-        console.log(data);
-
-        return;
-
         var chart = generateDBviz({
             data:data,
             selector: '#chart'
         }); 
 
-        console.log(chart);
-
+        //console.log(chart);
         chart.update();
 
     });
