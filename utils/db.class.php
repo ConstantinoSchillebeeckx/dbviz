@@ -86,8 +86,8 @@ class Schema {
 
 
                 // check FKs for table
-                $sql = sprintf("select concat(table_name, '.', column_name) as 'foreign key',  
-                concat(referenced_table_name, '.', referenced_column_name) as 'references'
+                $sql = sprintf("select concat(table_schema, '.', table_name, '.', column_name) as 'foreign key',  
+                concat(referenced_table_schema, '.', referenced_table_name, '.', referenced_column_name) as 'references'
                 from
                     information_schema.key_column_usage
                 where
@@ -117,22 +117,6 @@ class Schema {
         return $this->tables;
     }
 
-    // return array of tables names
-    // that are all history tables, if 
-    // none exist return false
-    public function get_history_tables() {
-        $hist = [];
-        foreach ( $this->get_all_tables() as $table ) {
-            $is_history = $this->get_table( $table )->is_history();
-            if ( $is_history ) $hist[] = $table;
-        }
-
-        if ( count( $hist ) ) {
-            return $hist;
-        } else {
-            return false;
-        }
-    }
 
     // return array of tables names
     // that are all data tables (not history)   
