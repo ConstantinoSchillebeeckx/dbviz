@@ -75,11 +75,7 @@ function generateDBviz(options) {
     chart.update = function update() {
       var nodes = flatten(chart.options.data),
           links = linkUp(nodes);
-
-        console.log(nodes);
-        console.log(links);
-
-    return;
+      nodes = Object.values(nodes);
 
       // Restart the force layout.
       force
