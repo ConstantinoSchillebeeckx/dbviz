@@ -154,12 +154,12 @@ function generateDBviz(options) {
     // has a 'fields' key - that is, until it reaches the
     // tables
     function flatten(root) {
-      var nodes = [], i = 0;
+      var nodes = {}, i = 0;
 
       function recurse(node) {
         if (node.struct && !node.fields) Object.keys(node.struct).forEach(function(d) { recurse(node.struct[d]); });
         if (!node.id) node.id = ++i;
-        if (!node.db_name) nodes.push(node); // only add to the stack if a table
+        if (!node.db_name && node.name) nodes[node.name] = node; // only add to the stack if a table
       }
 
       recurse(root);
@@ -173,7 +173,9 @@ function generateDBviz(options) {
 
         var links = [];
 
-        nodes.forEach(function(nodeDat) {
+        Object.keys(nodes).forEach(function(tableName) {
+    
+            var nodeDat = nodes[tableName];
 
             // check if any of the fields in the current node (table)
             // have links (foreign keys)
@@ -183,8 +185,9 @@ function generateDBviz(options) {
                 // if field has a foreign key
                 if (fieldDat.fk_ref) {
 
-                    var source = fieldDat.fk_ref;
-                    var target = nodeDat.name + '.' + field;
+                    var fk = fieldDat.fk_ref.split("."); // foreign key reference comes in as schema.table.field
+                    var source = nodes[fk[0] + '.' + fk[1]];
+                    var target = nodes[nodeDat.name];
                     links.push({source:source, target:target});
                 } 
 
