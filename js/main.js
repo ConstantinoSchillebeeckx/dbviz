@@ -101,14 +101,17 @@ function generateDBviz(options) {
           .on("click", click)
           .call(drag);
 
-      nodeEnter.append("circle")
-          .attr("r", 12 );
+      nodeEnter.append("rect")
+          .attr("rx", 6 )
+          .attr("ry", 6 )
+          .attr("width", 20 )
+          .attr("height", 10 )
 
       nodeEnter.append("text")
           .attr("dy", "-20px")
           .text(function(d) { return d.name; });
 
-      node.select("circle")
+      node.select("rect")
           .style("fill", color);
     }
 
